@@ -22,7 +22,7 @@
             });
 
             function myFunction(buttonId) {
-            console.log('Button clicked: ' + buttonId);
+                console.log('Button clicked: ' + buttonId);
             }
         </script>
     </head>
