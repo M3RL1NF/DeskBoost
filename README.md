@@ -1,5 +1,5 @@
-# desk-boost
-Web-Application using Docker, Laravel, MySQL
+# DESK_BOOST
+Desk-Sharing Web-Application using Docker, Laravel, MySQL
 
 ## Requirements
 Docker
