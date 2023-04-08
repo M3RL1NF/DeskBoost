@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,4 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [Controller::class, 'index']);
+Route::get('/', [LoginController::class, 'login'])->name('login');
+
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::post('/', [LoginController::class, 'handle'])->name('handle');
+
+Route::get('/booking', [BookingController::class, 'booking']);
+
+Route::get('/booking-overview', [BookingController::class, 'booking']);

@@ -5,7 +5,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css">
         <script>
             $(document).ready(function() {
                 $(".navbar-button").click(function() {
@@ -33,13 +33,23 @@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                    </ul>
-                </div>
-                <div class="ml-auto">
-                    <button type="button" class="btn btn-dark active navbar-button">Meine Buchungen</button>
-                    <button type="button" class="btn btn-dark navbar-button">Buchen</button>
+                <div class="ml-auto" style="width: 350px;">
+                    <div class="d-flex">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-light active navbar-button" style="width: 150px; margin-right: 10px;">Buchen</button>
+                        </form>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-light navbar-button" style="width: 150px; margin-right: 10px;">Meine Buchungen</button>
+                        </form>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="btn btn-dark">
+                                <i class="bi bi-box-arrow-right"></i>
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -56,14 +66,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php for ($i = 6; $i <= 23; $i++) { ?>
+                    <?php for ($i = 6; $i <= 22; $i++) { ?>
                         <tr>
                             <td><p><?php echo $i; ?>:00 Uhr</p></td>
-                            <td><button type="button" id="<?php echo $i; ?>" class="btn btn-dark btn-block table-button">&nbsp;</button></td>
                             <td><button type="button" id="<?php echo $i+0.1; ?>" class="btn btn-dark btn-block table-button">&nbsp;</button></td>
                             <td><button type="button" id="<?php echo $i+0.2; ?>" class="btn btn-dark btn-block table-button">&nbsp;</button></td>
                             <td><button type="button" id="<?php echo $i+0.3; ?>" class="btn btn-dark btn-block table-button">&nbsp;</button></td>
                             <td><button type="button" id="<?php echo $i+0.4; ?>" class="btn btn-dark btn-block table-button">&nbsp;</button></td>
+                            <td><button type="button" id="<?php echo $i+0.5; ?>" class="btn btn-dark btn-block table-button">&nbsp;</button></td>
                         </tr>
                     <?php } ?>
                 </tbody>
