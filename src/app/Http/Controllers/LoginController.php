@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
@@ -24,7 +25,7 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        $request->session()->flush();
+        Session::forget('user_id');
 
         return view('login');
     }
@@ -38,7 +39,7 @@ class LoginController extends Controller
             'password' => bcrypt($request->input('password'))
         ]);
 
-        $request->session()->put('user_id', $user->id);
+        Session::put('user_id', $user->id);
 
         return view('booking');
     }

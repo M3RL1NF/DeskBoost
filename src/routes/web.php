@@ -21,6 +21,6 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::post('/', [LoginController::class, 'handle'])->name('handle');
 
-Route::get('/booking', [BookingController::class, 'booking']);
+Route::get('/booking', [BookingController::class, 'booking'])->name('booking');
 
-Route::get('/booking-overview', [BookingController::class, 'booking']);
+Route::get('/booking-overview', [BookingController::class, 'bookingoverview'])->name('booking-overview');
