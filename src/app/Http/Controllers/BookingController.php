@@ -16,11 +16,9 @@ class BookingController extends Controller
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    public function booking(Request $request)
+    public function booking()
     {
-        $id = $request->input('id') ?? Room::orderBy('id', 'asc')->first()->id;
-
-        Log::info('ID: ' . $request->input('id'));
+        $id = request('id') ?? Room::orderBy('id', 'asc')->first()->id;
 
         $room = Room::find($id);
         $result = $this->getRoomCapacitiesForCurrentWeek($id);
@@ -55,9 +53,13 @@ class BookingController extends Controller
         return $capacityData;
     }
 
-    // change to $request
-    function saveBookings($roomId, $bookingData)
+    function saveBookings()
     {
+        $roomId = request('roomId');
+        $bookingData = request('bookingData');
+
+        $id = $roomId ?? Room::orderBy('id', 'asc')->first()->id;
+
         foreach ($bookingData as $booking) {
             [$block, $day] = explode('.', $booking);
 
@@ -65,10 +67,12 @@ class BookingController extends Controller
 
             Booking::create([
                 'user_id' => Session::get('user_id'),
-                'room_id' => $roomId,
+                'room_id' => $id,
                 'date' => $date,
-                'block' => $block
+                'block' => $booking
             ]);
         }
+
+        return route('booking', ['id' => $id]);
     }
 }

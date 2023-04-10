@@ -2,6 +2,7 @@
 <html>
     <head>
         <title>DESKBOOST</title>
+        <meta name="csrf-token" content="<?php echo csrf_token(); ?>">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -25,6 +26,29 @@
                         clickedIds.push(buttonId);
                     }
                     console.log(clickedIds);
+                });
+
+                $('.save-booking-button').click(function() {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('save-bookings') }}",
+                        data: {
+                            roomId: new URLSearchParams(window.location.search).get('id'),
+                            bookingData: clickedIds
+                        },
+                        success: function(response) {
+                            
+                        },
+                        error: function(error) {
+                            
+                        }
+                    });
                 });
             });
 
@@ -72,7 +96,6 @@
                 </div>
             </div>
         </nav>
-        {{ $result['sum_of_entries'] }}
         <div class="container">
             @php
                 $today = \Carbon\Carbon::today();
@@ -127,8 +150,16 @@
                 </tbody>
             </table>
         </div>
-        <div class="container mt-3 mb-3 text-right">
-            <button type="button" class="btn btn-dark btn-block col-md-3 ml-auto">Speichern</button>
-        </div>
+        <form method="POST" action="{{ route('save-bookings') }}">
+            @csrf
+            <div class="container mt-3 mb-3 text-right save-booking-button">
+                <button type="button" class="btn btn-dark btn-block col-md-3 ml-auto">Speichern</button>
+            </div>
+        </form>
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
     </body>
 </html>

@@ -23,4 +23,6 @@ Route::post('/', [LoginController::class, 'handle'])->name('handle');
 
 Route::get('/booking', [BookingController::class, 'booking'])->name('booking');
 
+Route::post('/save-bookings', [BookingController::class, 'saveBookings'])->name('save-bookings');
+
 Route::get('/booking-overview', [BookingController::class, 'bookingoverview'])->name('booking-overview');
