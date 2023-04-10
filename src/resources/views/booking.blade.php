@@ -27,6 +27,22 @@
                     console.log(clickedIds);
                 });
             });
+
+            $(function() {
+                // Get the selected room ID from the URL
+                var roomId = new URLSearchParams(window.location.search).get('id');
+                // If the room ID is defined, set the selected option in the dropdown
+                if (roomId) {
+                    $('#room-select').val(roomId);
+                }
+
+                $('#room-select').on('change', function() {
+                    var roomId = $(this).val();
+                    var url = "{{ route('booking') }}?id=" + roomId;
+                    $('#booking-form').attr('action', url);
+                    $('#booking-form').submit();
+                });
+            });
         </script>
     </head>
     <body>
@@ -56,6 +72,7 @@
                 </div>
             </div>
         </nav>
+        {{ $result['sum_of_entries'] }}
         <div class="container">
             @php
                 $today = \Carbon\Carbon::today();
@@ -66,15 +83,28 @@
                 <h3>Kalenderwoche {{ $today->weekOfYear }}</h3>
                 <h4>{{ $week_start }} - {{ $week_end }}</h4>
             </div>
+            <form method="GET" action="{{ route('booking', ['id' => $roomId ?? $rooms->first()->id]) }}" id="booking-form">
+                @csrf
+                <div class="form-group row mt-3">
+                    <label for="room-select" class="col-md-1 col-form-label"><b>Raum:</b></label>
+                    <div class="col-sm-11">
+                        <select class="form-control" id="room-select" name="id">
+                            @foreach ($rooms as $room)
+                                <option value="{{ $room->id }}" {{ $room->id == $roomId ? 'selected' : '' }}>Etage {{ $room->floor }} - {{ $room->name }} ({{ $room->alias }}) | Kapazität {{ $room->capacity }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </form>
             <table id="booking-table" class="table table-sm mt-3">
                 <thead>
                     <tr class="text-center">
                         <th style="width: 10%;"></th>
-                        <th style="width: 15%;">Monday</th>
-                        <th style="width: 15%;">Tuesday</th>
-                        <th style="width: 15%;">Wednesday</th>
-                        <th style="width: 15%;">Thursday</th>
-                        <th style="width: 15%;">Friday</th>
+                        <th style="width: 15%;">Montag</th>
+                        <th style="width: 15%;">Dienstag</th>
+                        <th style="width: 15%;">Mittwoch</th>
+                        <th style="width: 15%;">Donnerstag</th>
+                        <th style="width: 15%;">Freitag</th>
                     </tr>
                 </thead>
                 <tbody>

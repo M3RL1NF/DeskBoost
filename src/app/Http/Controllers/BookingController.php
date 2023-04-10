@@ -9,25 +9,27 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class BookingController extends Controller
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    public function booking()
+    public function booking(Request $request)
     {
-        // $room   = Room::orderBy('id', 'asc')->first();
-        // $result = $this->getRoomCapacitiesForCurrentWeek($room->id);
+        $id = $request->input('id') ?? Room::orderBy('id', 'asc')->first()->id;
 
-        // return view('booking', ['room' => $room, 'result' => $result]);
+        Log::info('ID: ' . $request->input('id'));
 
-        return view('booking');
+        $room = Room::find($id);
+        $result = $this->getRoomCapacitiesForCurrentWeek($id);
+    
+        return view('booking', ['room' => $room, 'roomId' => $room->id, 'rooms' => Room::all(), 'result' => $result]);
     }
 
     function getRoomCapacitiesForCurrentWeek($roomId)
     {
-        /*
         $startOfWeek = Carbon::now()->startOfWeek();
         $endOfWeek = Carbon::now()->endOfWeek();
 
@@ -35,7 +37,7 @@ class BookingController extends Controller
 
         $sumOfEntries = Booking::where('room_id', $room->id)
             ->whereBetween('date', [$startOfWeek, $endOfWeek])
-            ->sum('block');
+            ->count();
 
         $percentageCapacityFilled = ($sumOfEntries / $room->capacity) * 100;
 
@@ -51,25 +53,22 @@ class BookingController extends Controller
         ];
 
         return $capacityData;
-        */
     }
 
     // change to $request
     function saveBookings($roomId, $bookingData)
     {
-        /*
         foreach ($bookingData as $booking) {
             [$block, $day] = explode('.', $booking);
 
             $date = Carbon::now()->startOfWeek()->addDays($day - 1)->toDateString();
 
             Booking::create([
-                'user_id' => Session::get('user_id')
+                'user_id' => Session::get('user_id'),
                 'room_id' => $roomId,
                 'date' => $date,
                 'block' => $block
             ]);
         }
-        */
     }
 }

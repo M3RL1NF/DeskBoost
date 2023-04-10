@@ -19,7 +19,7 @@ class LoginController extends Controller
             return view('login');
         }
         else {
-            return view('booking');
+            return redirect()->route('routing');
         }
     }
 
@@ -27,7 +27,7 @@ class LoginController extends Controller
     {
         Session::forget('user_id');
 
-        return view('login');
+        return redirect()->route('login');
     }
 
     public function handle(Request $request)
@@ -41,6 +41,6 @@ class LoginController extends Controller
 
         Session::put('user_id', $user->id);
 
-        return view('booking');
+        return redirect()->route('booking');
     }
 }
