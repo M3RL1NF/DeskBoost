@@ -13,9 +13,7 @@
                     $(".btn").removeClass("active");
                     $(this).addClass("active");
                 });
-            });
 
-            $(document).ready(function() {
                 var clickedIds = [];
                 $('.table-button').click(function() {
                     var buttonId = $(this).attr('id');
@@ -43,19 +41,15 @@
                             bookingData: clickedIds
                         },
                         success: function(response) {
-                            
+
                         },
                         error: function(error) {
-                            
+
                         }
                     });
                 });
-            });
 
-            $(function() {
-                // Get the selected room ID from the URL
                 var roomId = new URLSearchParams(window.location.search).get('id');
-                // If the room ID is defined, set the selected option in the dropdown
                 if (roomId) {
                     $('#room-select').val(roomId);
                 }
@@ -65,6 +59,20 @@
                     var url = "{{ route('booking') }}?id=" + roomId;
                     $('#booking-form').attr('action', url);
                     $('#booking-form').submit();
+                });
+                
+                // @todo: fix - this should show the booked blocks in green
+                var blockIds = $('#user-bookings').data('user-bookings');
+                $.each(blockIds, function(index, value) {
+                    console.log(index, value);
+                    $('#' + value).removeClass('btn-dark').addClass('btn-success');
+                });
+
+                // @todo: fix - this should show the full blocks in red
+                var result = $('#result').data('result');
+                $.each(result, function(index, value) {
+                    console.log(index, value);
+                    $('#' + value).removeClass('btn-dark').addClass('btn-danger');
                 });
             });
         </script>
@@ -96,6 +104,8 @@
                 </div>
             </div>
         </nav>
+        <div id="user-bookings" data-user-bookings="{{ json_encode($userBookings) }}"></div>
+        <div id="result" data-result="{{ json_encode($result) }}"></div>
         <div class="container">
             @php
                 $today = \Carbon\Carbon::today();
@@ -113,7 +123,7 @@
                     <div class="col-sm-11">
                         <select class="form-control" id="room-select" name="id">
                             @foreach ($rooms as $room)
-                                <option value="{{ $room->id }}" {{ $room->id == $roomId ? 'selected' : '' }}>Etage {{ $room->floor }} - {{ $room->name }} ({{ $room->alias }}) | Kapazität {{ $room->capacity }}</option>
+                                <option value="{{ $room->id }}" {{ $room->id == $roomId ? 'selected' : '' }}>{{ $room->floor }} - {{ $room->name }} ({{ $room->alias }}) | Kapazität {{ $room->capacity }}</option>
                             @endforeach
                         </select>
                     </div>

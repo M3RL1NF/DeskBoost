@@ -22,35 +22,51 @@ class BookingController extends Controller
 
         $room = Room::find($id);
         $result = $this->getRoomCapacitiesForCurrentWeek($id);
+        $userBookings = $this->getUsersBooking($id);
     
-        return view('booking', ['room' => $room, 'roomId' => $room->id, 'rooms' => Room::all(), 'result' => $result]);
+        return view('booking', ['room' => $room, 'roomId' => $room->id, 'rooms' => Room::all(), 'result' => $result, 'userBookings' => $userBookings]);
     }
 
     function getRoomCapacitiesForCurrentWeek($roomId)
     {
         $startOfWeek = Carbon::now()->startOfWeek();
-        $endOfWeek = Carbon::now()->endOfWeek();
+        $endOfWeek   = Carbon::now()->endOfWeek();
 
-        $room = Room::findOrFail($roomId);
+        $room        = Room::findOrFail($roomId);
+        $bookings    = Booking::where('room_id', $room->id)->whereBetween('date', [$startOfWeek, $endOfWeek])->get();
+        $capacity      = [];
 
-        $sumOfEntries = Booking::where('room_id', $room->id)
-            ->whereBetween('date', [$startOfWeek, $endOfWeek])
-            ->count();
+        foreach ($bookings as $booking) {
+            $bookingSum = Booking::where('room_id', $room->id)
+                ->where('block', $booking->block)
+                ->whereBetween('date', [$startOfWeek, $endOfWeek])
+                ->count();
 
-        $percentageCapacityFilled = ($sumOfEntries / $room->capacity) * 100;
+            if ($bookingSum >= $room->capacity && !in_array($booking->block, $capacity)) {
+                array_push($capacity, $booking->block);
+            }
+        }
 
-        $isAtCapacity = $sumOfEntries >= $room->capacity;
+        Log::info($capacity);
 
-        $capacityData = [
-            'room_id' => $room->id,
-            'room_name' => $room->name,
-            'capacity' => $room->capacity,
-            'sum_of_entries' => $sumOfEntries,
-            'percentage_capacity_filled' => $percentageCapacityFilled,
-            'is_at_capacity' => $isAtCapacity
-        ];
+        return $capacity;
+    }
 
-        return $capacityData;
+    function getUsersBooking($roomId) {
+        $userBookings      = [];
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek   = Carbon::now()->endOfWeek();
+        $bookings = Booking::where('room_id', $roomId)->where('user_id', Session::get('user_id'))->whereBetween('date', [$startOfWeek, $endOfWeek])->get();
+
+        foreach ($bookings as $booking) {
+            if (!in_array($booking->block, $userBookings)) {
+                array_push($userBookings, $booking->block);
+            }
+        }
+
+        Log::info($userBookings);
+
+        return $userBookings;
     }
 
     function saveBookings()
