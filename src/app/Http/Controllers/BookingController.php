@@ -16,8 +16,7 @@ class BookingController extends Controller
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    public function booking()
-    {
+    public function booking() {
         $id = request('id') ?? Room::orderBy('id', 'asc')->first()->id;
 
         $room = Room::find($id);
@@ -27,8 +26,7 @@ class BookingController extends Controller
         return view('booking', ['room' => $room, 'roomId' => $room->id, 'rooms' => Room::all(), 'result' => $result, 'userBookings' => $userBookings]);
     }
 
-    function getRoomCapacitiesForCurrentWeek($roomId)
-    {
+    function getRoomCapacitiesForCurrentWeek($roomId) {
         $startOfWeek = Carbon::now()->startOfWeek();
         $endOfWeek   = Carbon::now()->endOfWeek();
 
@@ -69,8 +67,7 @@ class BookingController extends Controller
         return $userBookings;
     }
 
-    function saveBookings()
-    {
+    function saveBookings() {
         $roomId = request('roomId');
         $bookingData = request('bookingData');
 
@@ -90,5 +87,9 @@ class BookingController extends Controller
         }
 
         return route('booking', ['id' => $id]);
+    }
+
+    function overview() {
+        return view('overview');
     }
 }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,4 +26,6 @@ Route::get('/booking', [BookingController::class, 'booking'])->name('booking');
 
 Route::post('/save-bookings', [BookingController::class, 'saveBookings'])->name('save-bookings');
 
-Route::get('/booking-overview', [BookingController::class, 'bookingoverview'])->name('booking-overview');
+Route::post('/overview', [BookingController::class, 'overview'])->name('overview');
+
+Route::post('/room', [RoomController::class, 'index'])->name('room');

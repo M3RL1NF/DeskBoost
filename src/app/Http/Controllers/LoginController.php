@@ -19,7 +19,7 @@ class LoginController extends Controller
             return view('login');
         }
         else {
-            return redirect()->route('routing');
+            return redirect()->route('booking');
         }
     }
 

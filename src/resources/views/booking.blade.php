@@ -84,15 +84,19 @@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="ml-auto" style="width: 350px;">
+                <div class="ml-auto" style="width: 500px;">
                     <div class="d-flex">
-                        <form method="POST" action="{{ route('booking') }}">
+                        <form method="GET" action="{{ route('booking') }}">
                             @csrf
-                            <button type="submit" class="btn btn-outline-light active navbar-button" style="width: 150px; margin-right: 10px;">Buchen</button>
+                            <button type="submit" class="btn btn-outline-light navbar-button {{ Request::is('booking') ? 'active' : '' }}" style="width: 150px; margin-right: 10px;">Buchen</button>
                         </form>
-                        <form method="POST" action="{{ route('booking-overview') }}">
+                        <form method="POST" action="{{ route('overview') }}">
                             @csrf
-                            <button type="submit" class="btn btn-outline-light navbar-button" style="width: 150px; margin-right: 10px;">Meine Buchungen</button>
+                            <button type="submit" class="btn btn-outline-light navbar-button {{ Request::is('overview') ? 'active' : '' }}" style="width: 150px; margin-right: 10px;">Meine Buchungen</button>
+                        </form>
+                        <form method="POST" action="{{ route('room') }}">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-light navbar-button {{ Request::is('room') ? 'active' : '' }}" style="width: 150px; margin-right: 10px;">Raumübersicht</button>
                         </form>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
