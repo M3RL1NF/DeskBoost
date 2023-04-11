@@ -1,14 +1,14 @@
 # DESK-BOOST
-Desk-Sharing Web-Application using Docker, Laravel, MySQL
+Desk-Sharing Web-Application using Docker, Laravel & MySQL
 
 ## Requirements
-Docker
-WSL (if running windows)
+- Docker
+- WSL (if running windows)
 
 ## Usage
-1. clone Repo
-2. navigate to folder and run `docker-compose up -d --build app`
-3. in src directory create .env and change mysql vars matching the docker-compose.yml (connection: `mysql`, username/database: `homestead`, password: `secret`)
+1. Clone Repo
+2. Navigate to folder and run `docker-compose up -d --build app`
+3. In src directory create .env and change mysql vars matching the docker-compose.yml (connection: `mysql`, username/database: `homestead`, password: `secret`)
 
 - **nginx** - `:80`
 - **mysql** - `:3306`

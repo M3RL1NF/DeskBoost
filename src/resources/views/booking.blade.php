@@ -80,7 +80,7 @@
     <body>
         <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand" href="#" style="font-size: 150%;">D E S K <b>BOOST</b></a>
+                <a class="navbar-brand" href="#" style="font-size: 200%;">D E S K <b>BOOST</b></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -167,7 +167,7 @@
         <form method="POST" action="{{ route('save-bookings') }}">
             @csrf
             <div class="container mt-3 mb-3 text-right save-booking-button">
-                <button type="button" class="btn btn-dark btn-block col-md-3 ml-auto">Speichern</button>
+                <button type="button" class="btn btn-success btn-block ml-auto">Speichern</button>
             </div>
         </form>
         @if(session('success'))

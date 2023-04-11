@@ -11,7 +11,7 @@
     <body>
         <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand" href="#" style="font-size: 150%;">D E S K <b>BOOST</b></a>
+                <a class="navbar-brand" href="#" style="font-size: 200%;">D E S K <b>BOOST</b></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -40,7 +40,105 @@
             </div>
         </nav>
         <div class="container mt-3">
-            <p>Buchungsübersicht hier</p>
+            @php
+                $today = \Carbon\Carbon::today();
+                $week_start = $today->startOfWeek()->format('d.m.Y');
+                $week_end = $today->endOfWeek()->format('d.m.Y');
+            @endphp
+            <div style="text-align:center;" class="mt-3">
+                <h3>Kalenderwoche {{ $today->weekOfYear }}</h3>
+                <h4>{{ $week_start }} - {{ $week_end }}</h4>
+            </div>
+            <table id="booking-table" class="table table-sm mt-3">
+                <thead>
+                    <tr class="text-center">
+                        <th style="width: 10%;"></th>
+                        <th style="width: 15%;">Montag</th>
+                        <th style="width: 15%;">Dienstag</th>
+                        <th style="width: 15%;">Mittwoch</th>
+                        <th style="width: 15%;">Donnerstag</th>
+                        <th style="width: 15%;">Freitag</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php for ($i = 6; $i <= 22; $i++) { ?>
+                        <tr>
+                            <td>
+                                <?php 
+                                    $start_time = str_pad($i, 2, '0', STR_PAD_LEFT) . ':00';
+                                    $end_time = str_pad($i+1, 2, '0', STR_PAD_LEFT) . ':00';
+                                ?>
+                                <p><?php echo $start_time . ' - ' . $end_time; ?></p>
+                            </td>
+                            <?php 
+                                $button_exists = false;
+                                foreach ($result as $key => $value) {
+                                    if ($key == $i+0.1) { ?>
+                                        <td><button type="button" id="<?php echo $i+0.1; ?>" class="btn btn-success btn-block table-button"><?php echo $value; ?></button></td>
+                                        <?php $button_exists = true;
+                                    }
+                                }
+                                if(!$button_exists){
+                            ?>
+                                <td><button type="button" id="<?php echo $i+0.1; ?>" class="btn btn-dark btn-block table-button">&nbsp;</button></td>
+                            <?php } ?>
+
+                            <?php 
+                                $button_exists = false;
+                                foreach ($result as $key => $value) {
+                                    if ($key == $i+0.2) { ?>
+                                        <td><button type="button" id="<?php echo $i+0.2; ?>" class="btn btn-success btn-block table-button"><?php echo $value; ?></button></td>
+                                        <?php $button_exists = true;
+                                    }
+                                }
+                                if(!$button_exists){ 
+                            ?>
+                                <td><button type="button" id="<?php echo $i+0.2; ?>" class="btn btn-dark btn-block table-button">&nbsp;</button></td>
+                            <?php } ?>
+
+                            <?php 
+                                $button_exists = false; 
+                                foreach ($result as $key => $value) {
+                                    if ($key == $i+0.3) { ?>
+                                        <td><button type="button" id="<?php echo $i+0.3; ?>" class="btn btn-success btn-block table-button"><?php echo $value; ?></button></td>
+                                        <?php $button_exists = true; 
+                                    }
+                                }
+                                if(!$button_exists){ 
+                            ?>
+                                <td><button type="button" id="<?php echo $i+0.3; ?>" class="btn btn-dark btn-block table-button">&nbsp;</button></td>
+                            <?php } ?>
+
+                            <?php 
+                                $button_exists = false; 
+                                foreach ($result as $key => $value) {
+                                    if ($key == $i+0.4) { ?>
+                                        <td><button type="button" id="<?php echo $i+0.4; ?>" class="btn btn-success btn-block table-button"><?php echo $value; ?></button></td>
+                                        <?php $button_exists = true; 
+                                    }
+                                }
+                                if(!$button_exists){ 
+                            ?>
+                                <td><button type="button" id="<?php echo $i+0.4; ?>" class="btn btn-dark btn-block table-button">&nbsp;</button></td>
+                            <?php } ?>
+
+                            <?php 
+                                $button_exists = false; 
+                                foreach ($result as $key => $value) {
+                                    if ($key == $i+0.5) { ?>
+                                        <td><button type="button" id="<?php echo $i+0.5; ?>" class="btn btn-success btn-block table-button"><?php echo $value; ?></button></td>
+                                        <?php $button_exists = true;
+                                    }
+                                }
+                                if(!$button_exists){ 
+                            ?>
+                                <td><button type="button" id="<?php echo $i+0.5; ?>" class="btn btn-dark btn-block table-button">&nbsp;</button></td>
+                            <?php } ?>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-danger btn-block">Buchungen stornieren</button>
         </div>
     </body>
 </html>

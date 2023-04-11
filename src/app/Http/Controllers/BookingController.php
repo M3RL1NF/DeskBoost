@@ -51,10 +51,10 @@ class BookingController extends Controller
     }
 
     function getUsersBooking($roomId) {
-        $userBookings      = [];
-        $startOfWeek = Carbon::now()->startOfWeek();
-        $endOfWeek   = Carbon::now()->endOfWeek();
-        $bookings = Booking::where('room_id', $roomId)->where('user_id', Session::get('user_id'))->whereBetween('date', [$startOfWeek, $endOfWeek])->get();
+        $userBookings = [];
+        $startOfWeek  = Carbon::now()->startOfWeek();
+        $endOfWeek    = Carbon::now()->endOfWeek();
+        $bookings     = Booking::where('room_id', $roomId)->where('user_id', Session::get('user_id'))->whereBetween('date', [$startOfWeek, $endOfWeek])->get();
 
         foreach ($bookings as $booking) {
             if (!in_array($booking->block, $userBookings)) {
@@ -86,10 +86,21 @@ class BookingController extends Controller
             ]);
         }
 
-        return route('booking', ['id' => $id]);
+        return redirect()->route('overview');
+        // return route('booking', ['id' => $id]);
     }
 
     function overview() {
-        return view('overview');
+        $startOfWeek  = Carbon::now()->startOfWeek();
+        $endOfWeek    = Carbon::now()->endOfWeek();
+        $bookings     = Booking::where('user_id', Session::get('user_id'))->whereBetween('date', [$startOfWeek, $endOfWeek])->get();
+        
+        $result = $bookings->mapWithKeys(function ($booking) {
+            return [$booking->block => Room::where('id', $booking->room_id)->first()->name];
+        })->toArray();
+
+        Log::info($result);
+
+        return view('overview', ['result' => $result]);
     }
 }
