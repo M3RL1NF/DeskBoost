@@ -45,8 +45,6 @@ class BookingController extends Controller
             }
         }
 
-        // Log::info($capacity);
-
         return $capacity;
     }
 
@@ -86,8 +84,7 @@ class BookingController extends Controller
             ]);
         }
 
-        return redirect()->route('overview');
-        // return route('booking', ['id' => $id]);
+        return true;
     }
 
     function overview() {
@@ -98,8 +95,6 @@ class BookingController extends Controller
         $result = $bookings->mapWithKeys(function ($booking) {
             return [$booking->block => Room::where('id', $booking->room_id)->first()->name];
         })->toArray();
-
-        // Log::info($result);
 
         return view('overview', ['result' => $result]);
     }

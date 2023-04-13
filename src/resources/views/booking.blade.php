@@ -24,7 +24,6 @@
                         } else {
                             clickedIds.push(buttonId);
                         }
-                        console.log(clickedIds);
                     }
                 });
 
@@ -44,13 +43,26 @@
                             bookingData: clickedIds
                         },
                         success: function(response) {
+                            var form = $('<form></form>', {
+                                'method': 'POST',
+                                'action': '{{ route("overview") }}'
+                            });
 
+                            $('<input>').attr({
+                                'type': 'hidden',
+                                'name': '_token',
+                                'value': $('meta[name="csrf-token"]').attr('content')
+                            }).appendTo(form);
+
+                            $('body').append(form);
+                            form.submit();
                         },
                         error: function(error) {
-
+                            console.log(error)
                         }
                     });
                 });
+
 
                 var roomId = new URLSearchParams(window.location.search).get('id');
                 if (roomId) {
@@ -62,20 +74,6 @@
                     var url = "{{ route('booking') }}?id=" + roomId;
                     $('#booking-form').attr('action', url);
                     $('#booking-form').submit();
-                });
-                
-                // @todo: fix - this should show the booked blocks in green
-                var blockIds = $('#user-bookings').data('user-bookings');
-                $.each(blockIds, function(index, value) {
-                    console.log('user-bookings: ' + index, value);
-                    $('#' + value).removeClass('btn-dark').addClass('btn-success');
-                });
-
-                // @todo: fix - this should show the full blocks in red
-                var result = $('#result').data('result');
-                $.each(result, function(index, value) {
-                    console.log('full: ' + index, value);
-                    $('#' + value).removeClass('btn-dark').addClass('btn-danger');
                 });
             });
         </script>
