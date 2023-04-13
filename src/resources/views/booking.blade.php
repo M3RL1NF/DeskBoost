@@ -17,14 +17,17 @@
                 var clickedIds = [];
                 $('.table-button').click(function() {
                     var buttonId = $(this).attr('id');
-                    $(this).toggleClass('btn-success btn-dark');
-                    if ($.inArray(buttonId, clickedIds) !== -1) {
-                        clickedIds.splice($.inArray(buttonId, clickedIds), 1);
-                    } else {
-                        clickedIds.push(buttonId);
+                    if (!$(this).hasClass('disabled')) {
+                        $(this).toggleClass('btn-success btn-dark');
+                        if ($.inArray(buttonId, clickedIds) !== -1) {
+                            clickedIds.splice($.inArray(buttonId, clickedIds), 1);
+                        } else {
+                            clickedIds.push(buttonId);
+                        }
+                        console.log(clickedIds);
                     }
-                    console.log(clickedIds);
                 });
+
 
                 $('.save-booking-button').click(function() {
                     $.ajaxSetup({
@@ -64,14 +67,14 @@
                 // @todo: fix - this should show the booked blocks in green
                 var blockIds = $('#user-bookings').data('user-bookings');
                 $.each(blockIds, function(index, value) {
-                    console.log(index, value);
+                    console.log('user-bookings: ' + index, value);
                     $('#' + value).removeClass('btn-dark').addClass('btn-success');
                 });
 
                 // @todo: fix - this should show the full blocks in red
                 var result = $('#result').data('result');
                 $.each(result, function(index, value) {
-                    console.log(index, value);
+                    console.log('full: ' + index, value);
                     $('#' + value).removeClass('btn-dark').addClass('btn-danger');
                 });
             });
@@ -145,7 +148,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php for ($i = 6; $i <= 22; $i++) { ?>
+                <?php for ($i = 6; $i <= 22; $i++) { ?>
                         <tr>
                             <td>
                                 <?php 
@@ -154,11 +157,145 @@
                                 ?>
                                 <p><?php echo $start_time . ' - ' . $end_time; ?></p>
                             </td>
-                            <td><button type="button" id="<?php echo $i+0.1; ?>" class="btn btn-dark btn-block table-button">&nbsp;</button></td>
-                            <td><button type="button" id="<?php echo $i+0.2; ?>" class="btn btn-dark btn-block table-button">&nbsp;</button></td>
-                            <td><button type="button" id="<?php echo $i+0.3; ?>" class="btn btn-dark btn-block table-button">&nbsp;</button></td>
-                            <td><button type="button" id="<?php echo $i+0.4; ?>" class="btn btn-dark btn-block table-button">&nbsp;</button></td>
-                            <td><button type="button" id="<?php echo $i+0.5; ?>" class="btn btn-dark btn-block table-button">&nbsp;</button></td>
+                            @php
+                                $button_exists = false;
+                                $third_button_exists = false;
+                            @endphp
+                            @foreach ($userBookings as $user_key => $userBooking)
+                                    @if ($userBooking == $i+0.1)
+                                    {{-- Match found in first array, display a red disabled button --}}
+                                    <td><button type="button" id="{{ $i+0.1 }}" class="btn btn-success btn-block table-button disabled">&nbsp;</button></td>
+                                    @php $button_exists = true; @endphp
+                                    @break {{-- Exit the loop once a match is found --}}
+                                @endif
+                            @endforeach
+                            @if (!$button_exists)
+                                {{-- No match found in first array, check second array --}}
+                                @foreach ($result as $key => $value)
+                                @if ($value == $i+0.1)
+                                        {{-- Match found in second array, display a yellow disabled button --}}
+                                        <td><button type="button" id="{{ $i+0.1 }}" class="btn btn-danger btn-block table-button disabled">&nbsp;</button></td>
+                                        @php $third_button_exists = true; @endphp
+                                        @break {{-- Exit the loop once a match is found --}}
+                                    @endif
+                                @endforeach
+                                @if (!$third_button_exists)
+                                    {{-- No match found in second array, display a dark button --}}
+                                    <td><button type="button" id="{{ $i+0.1 }}" class="btn btn-dark btn-block table-button">&nbsp;</button></td>
+                                @endif
+                            @endif
+
+                            @php
+                                $button_exists = false;
+                                $third_button_exists = false;
+                            @endphp
+                            @foreach ($userBookings as $user_key => $userBooking)
+                                    @if ($userBooking == $i+0.2)
+                                    {{-- Match found in first array, display a red disabled button --}}
+                                    <td><button type="button" id="{{ $i+0.2 }}" class="btn btn-success btn-block table-button disabled">&nbsp;</button></td>
+                                    @php $button_exists = true; @endphp
+                                    @break {{-- Exit the loop once a match is found --}}
+                                @endif
+                            @endforeach
+                            @if (!$button_exists)
+                                {{-- No match found in first array, check second array --}}
+                                @foreach ($result as $key => $value)
+                                @if ($value == $i+0.2)
+                                        {{-- Match found in second array, display a yellow disabled button --}}
+                                        <td><button type="button" id="{{ $i+0.2 }}" class="btn btn-danger btn-block table-button disabled">&nbsp;</button></td>
+                                        @php $third_button_exists = true; @endphp
+                                        @break {{-- Exit the loop once a match is found --}}
+                                    @endif
+                                @endforeach
+                                @if (!$third_button_exists)
+                                    {{-- No match found in second array, display a dark button --}}
+                                    <td><button type="button" id="{{ $i+0.2 }}" class="btn btn-dark btn-block table-button">&nbsp;</button></td>
+                                @endif
+                            @endif
+
+                            @php
+                                $button_exists = false;
+                                $third_button_exists = false;
+                            @endphp
+                            @foreach ($userBookings as $user_key => $userBooking)
+                                    @if ($userBooking == $i+0.3)
+                                    {{-- Match found in first array, display a red disabled button --}}
+                                    <td><button type="button" id="{{ $i+0.3 }}" class="btn btn-success btn-block table-button disabled">&nbsp;</button></td>
+                                    @php $button_exists = true; @endphp
+                                    @break {{-- Exit the loop once a match is found --}}
+                                @endif
+                            @endforeach
+                            @if (!$button_exists)
+                                {{-- No match found in first array, check second array --}}
+                                @foreach ($result as $key => $value)
+                                @if ($value == $i+0.3)
+                                        {{-- Match found in second array, display a yellow disabled button --}}
+                                        <td><button type="button" id="{{ $i+0.3 }}" class="btn btn-danger btn-block table-button disabled">&nbsp;</button></td>
+                                        @php $third_button_exists = true; @endphp
+                                        @break {{-- Exit the loop once a match is found --}}
+                                    @endif
+                                @endforeach
+                                @if (!$third_button_exists)
+                                    {{-- No match found in second array, display a dark button --}}
+                                    <td><button type="button" id="{{ $i+0.3 }}" class="btn btn-dark btn-block table-button">&nbsp;</button></td>
+                                @endif
+                            @endif
+
+                            @php
+                                $button_exists = false;
+                                $third_button_exists = false;
+                            @endphp
+                            @foreach ($userBookings as $user_key => $userBooking)
+                                    @if ($userBooking == $i+0.4)
+                                    {{-- Match found in first array, display a red disabled button --}}
+                                    <td><button type="button" id="{{ $i+0.4 }}" class="btn btn-success btn-block table-button disabled">&nbsp;</button></td>
+                                    @php $button_exists = true; @endphp
+                                    @break {{-- Exit the loop once a match is found --}}
+                                @endif
+                            @endforeach
+                            @if (!$button_exists)
+                                {{-- No match found in first array, check second array --}}
+                                @foreach ($result as $key => $value)
+                                @if ($value == $i+0.4)
+                                        {{-- Match found in second array, display a yellow disabled button --}}
+                                        <td><button type="button" id="{{ $i+0.4 }}" class="btn btn-danger btn-block table-button disabled">&nbsp;</button></td>
+                                        @php $third_button_exists = true; @endphp
+                                        @break {{-- Exit the loop once a match is found --}}
+                                    @endif
+                                @endforeach
+                                @if (!$third_button_exists)
+                                    {{-- No match found in second array, display a dark button --}}
+                                    <td><button type="button" id="{{ $i+0.4 }}" class="btn btn-dark btn-block table-button">&nbsp;</button></td>
+                                @endif
+                            @endif
+
+                            @php
+                                $button_exists = false;
+                                $third_button_exists = false;
+                            @endphp
+                            @foreach ($userBookings as $user_key => $userBooking)
+                                    @if ($userBooking == $i+0.5)
+                                    {{-- Match found in first array, display a red disabled button --}}
+                                    <td><button type="button" id="{{ $i+0.5 }}" class="btn btn-success btn-block table-button disabled">&nbsp;</button></td>
+                                    @php $button_exists = true; @endphp
+                                    @break {{-- Exit the loop once a match is found --}}
+                                @endif
+                            @endforeach
+                            @if (!$button_exists)
+                                {{-- No match found in first array, check second array --}}
+                                @foreach ($result as $key => $value)
+                                @if ($value == $i+0.5)
+                                        {{-- Match found in second array, display a yellow disabled button --}}
+                                        <td><button type="button" id="{{ $i+0.5 }}" class="btn btn-danger btn-block table-button disabled">&nbsp;</button></td>
+                                        @php $third_button_exists = true; @endphp
+                                        @break {{-- Exit the loop once a match is found --}}
+                                    @endif
+                                @endforeach
+                                @if (!$third_button_exists)
+                                    {{-- No match found in second array, display a dark button --}}
+                                    <td><button type="button" id="{{ $i+0.5 }}" class="btn btn-dark btn-block table-button">&nbsp;</button></td>
+                                @endif
+                            @endif
                         </tr>
                     <?php } ?>
                 </tbody>

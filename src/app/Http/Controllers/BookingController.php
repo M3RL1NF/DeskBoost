@@ -21,7 +21,7 @@ class BookingController extends Controller
 
         $room = Room::find($id);
         $result = $this->getRoomCapacitiesForCurrentWeek($id);
-        $userBookings = $this->getUsersBooking($id);
+        $userBookings = $this->getUsersBooking();
     
         return view('booking', ['room' => $room, 'roomId' => $room->id, 'rooms' => Room::all(), 'result' => $result, 'userBookings' => $userBookings]);
     }
@@ -45,16 +45,16 @@ class BookingController extends Controller
             }
         }
 
-        Log::info($capacity);
+        // Log::info($capacity);
 
         return $capacity;
     }
 
-    function getUsersBooking($roomId) {
+    function getUsersBooking() {
         $userBookings = [];
         $startOfWeek  = Carbon::now()->startOfWeek();
         $endOfWeek    = Carbon::now()->endOfWeek();
-        $bookings     = Booking::where('room_id', $roomId)->where('user_id', Session::get('user_id'))->whereBetween('date', [$startOfWeek, $endOfWeek])->get();
+        $bookings     = Booking::where('user_id', Session::get('user_id'))->whereBetween('date', [$startOfWeek, $endOfWeek])->get();
 
         foreach ($bookings as $booking) {
             if (!in_array($booking->block, $userBookings)) {
@@ -99,7 +99,7 @@ class BookingController extends Controller
             return [$booking->block => Room::where('id', $booking->room_id)->first()->name];
         })->toArray();
 
-        Log::info($result);
+        // Log::info($result);
 
         return view('overview', ['result' => $result]);
     }
