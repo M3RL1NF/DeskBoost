@@ -29,3 +29,5 @@ Route::post('/save-bookings', [BookingController::class, 'saveBookings'])->name(
 Route::post('/overview', [BookingController::class, 'overview'])->name('overview');
 
 Route::post('/room', [RoomController::class, 'index'])->name('room');
+
+Route::post('/cancel', [BookingController::class, 'cancel'])->name('cancel');

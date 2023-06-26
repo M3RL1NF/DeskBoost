@@ -118,7 +118,7 @@
                 $week_end = $today->endOfWeek()->format('d.m.Y');
             @endphp
             <div style="text-align:center;" class="mt-3">
-                <h3>Kalenderwoche {{ $today->weekOfYear }}</h3>
+                <h3> < Kalenderwoche {{ $today->weekOfYear }} > </h3>
                 <h4>{{ $week_start }} - {{ $week_end }}</h4>
             </div>
             <form method="GET" action="{{ route('booking', ['id' => $roomId ?? $rooms->first()->id]) }}" id="booking-form">
@@ -302,7 +302,7 @@
         <form method="POST" action="{{ route('save-bookings') }}">
             @csrf
             <div class="container mt-3 mb-3 text-right save-booking-button">
-                <button type="button" class="btn btn-success btn-block ml-auto">Speichern</button>
+                <button type="button" class="btn btn-success btn-block ml-auto">Buchen</button>
             </div>
         </form>
         @if(session('success'))

@@ -60,8 +60,6 @@ class BookingController extends Controller
             }
         }
 
-        Log::info($userBookings);
-
         return $userBookings;
     }
 
@@ -97,5 +95,15 @@ class BookingController extends Controller
         })->toArray();
 
         return view('overview', ['result' => $result]);
+    }
+
+    function cancel(Request $request) {
+        $id = $request->input('id');
+
+        $date = Carbon::now()->startOfWeek()->addDays(($id - 1));
+
+        Booking::where('user_id', Session::get('user_id'))->where('date', $date)->delete();
+
+        return true;
     }
 }

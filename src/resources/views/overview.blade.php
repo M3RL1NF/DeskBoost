@@ -7,6 +7,58 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css">
+        <script>
+            $(document).ready(function() {
+                $(".delete-button").hover(function() {
+                    var columnIndex = $(this).parent().index();
+                    $("td:nth-child(" + (columnIndex + 1) + ") button.table-button").not(this).addClass("highlight");
+                }, function() {
+                    $("button.table-button").removeClass("highlight");
+                });
+            
+
+                $('.delete-button').click(function() {
+                    var id = $(this).attr('id');
+
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('cancel') }}",
+                        data: {
+                            id: id
+                        },
+                        success: function(response) {
+                            var form = $('<form></form>', {
+                                'method': 'POST',
+                                'action': '{{ route("overview") }}'
+                            });
+
+                            $('<input>').attr({
+                                'type': 'hidden',
+                                'name': '_token',
+                                'value': $('meta[name="csrf-token"]').attr('content')
+                            }).appendTo(form);
+
+                            $('body').append(form);
+                            form.submit();
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
+                });
+            });
+        </script>
+        <style>
+            .highlight {
+                background-color: #eb7171;
+            }
+        </style>
     </head>
     <body>
         <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
@@ -46,7 +98,7 @@
                 $week_end = $today->endOfWeek()->format('d.m.Y');
             @endphp
             <div style="text-align:center;" class="mt-3">
-                <h3>Kalenderwoche {{ $today->weekOfYear }}</h3>
+                <h3> < Kalenderwoche {{ $today->weekOfYear }} > </h3>
                 <h4>{{ $week_start }} - {{ $week_end }}</h4>
             </div>
             <table id="booking-table" class="table table-sm mt-3">
@@ -136,9 +188,16 @@
                             <?php } ?>
                         </tr>
                     <?php } ?>
+                    <tr>
+                        <td></td>
+                        <td><button type="button" id="1" class="btn btn-danger btn-block table-button delete-button">Stornieren</button></td>
+                        <td><button type="button" id="2" class="btn btn-danger btn-block table-button delete-button">Stornieren</button></td>
+                        <td><button type="button" id="3" class="btn btn-danger btn-block table-button delete-button">Stornieren</button></td>
+                        <td><button type="button" id="4" class="btn btn-danger btn-block table-button delete-button">Stornieren</button></td>
+                        <td><button type="button" id="5" class="btn btn-danger btn-block table-button delete-button">Stornieren</button></td>
+                    </tr>
                 </tbody>
             </table>
-            <button type="button" class="btn btn-danger btn-block">Buchungen stornieren</button>
         </div>
     </body>
 </html>
